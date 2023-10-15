@@ -1,7 +1,7 @@
 # from flask import Flask, render_template, request
 from kataTerikat import patterns, validateSatuKata, validateDuaKata
 from preprocessing import preprocessing
-from rabinKarp import rabinKarp, detect_pattern 
+from rabinKarp import rabinKarp 
 from bigram import generate_bigrams
 import warnings
 # app = Flask(__name__, template_folder='html')
@@ -48,15 +48,17 @@ detected_bigram_with_terikat_prefix = []
 
 # Cari pattern di bigram
 for text, index in bigrams:
-    is_pattern = detect_pattern(text, patterns, index)
-    if is_pattern != None:
-        detected_bigram_with_terikat_prefix.append(is_pattern)
+    result = rabinKarp(text, patterns, True, index)
+    if result != []:
+        detected_bigram_with_terikat_prefix.append(result)
 
 no_detected_kata_terikat = True
 
 print("\nBerikut list kata terikat:")
 no_detected_kata_terikat = validateSatuKata(unique_data, word_list)
-no_detected_kata_terikat = validateDuaKata(detected_bigram_with_terikat_prefix, word_list)
+
+if (detected_bigram_with_terikat_prefix != []):
+    no_detected_kata_terikat = validateDuaKata(detected_bigram_with_terikat_prefix, word_list)
 
 # Jika tidak ada kata terikat
 if (no_detected_kata_terikat):
