@@ -1,5 +1,4 @@
 from bigram import split_words
-from nlp_id.postag import PosTag
 
 patterns = [
     'a',
