@@ -1,4 +1,5 @@
 from bigram import split_words
+from nlp_id.postag import PosTag
 
 patterns = [
     'a',
@@ -191,12 +192,18 @@ def validateDuaKata(detected_bigram_with_terikat_prefix, word_list):
         word = bigram_text.replace(" ", "")
         
         # Jika terpisah dengan spasi namun seharusnya digabung
-        if (result[1] in word_list) and result[0] != 'kata' and result[0].lower() != 'maha' and word not in word_list and result[0] in patterns:
+        if (result[1] in word_list) and result[0] != 'kata' and result[0] != 'para' and result[0].lower() != 'maha' and word not in word_list and result[0] in patterns:
             resultKataTerikat[bigram_text] = {
                     "is_correct": False,
                     "suggestion": word
                 }
             # print(bigram_text + " salah di index " + str(index) + ". rekomendasi yang diberikan: " + word)
+
+        if (result[1] in word_list) and result[0] == 'para' and word in word_list and result[0] in patterns:
+            resultKataTerikat[bigram_text] = {
+                    "is_correct": False,
+                    "suggestion": result[0] + result[1]
+                }
 
         # Jika terpisah dengan spasi namun seharusnya diberi tanda hubung (-)
         if (result[1][0].isupper()) and result[0] != 'kata' and result[0].lower() != 'maha' and result[0] in patterns and result[1] in word_list:
