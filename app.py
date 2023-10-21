@@ -60,8 +60,8 @@ def main():
         result.update(validateDuaKata(detected_bigram_with_terikat_prefix, word_list))
 
     # Jika tidak ada kata terikat
-    if (result == []):
-        result = {'message': "Tidak ada kata terikat yang ditemukan"}
+    if (result == {}):
+        result = {'errormessage': "Tidak ada kata terikat yang ditemukan"}
     
     return render_template('result.html', data = {
         'paragraph': text,

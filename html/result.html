@@ -33,7 +33,11 @@
                                 <li>Perbaikan: {{ info.suggestion }}</li>
                             </ul>
                         {% else %}
-                            <li class="text-green-500">{{ word }}</li>
+                            {% if info.is_correct == True %}
+                                <li class="text-green-500">{{ word }}</li>
+                            {% else %}
+                                <p>{{ info }}</p>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 </ol>
