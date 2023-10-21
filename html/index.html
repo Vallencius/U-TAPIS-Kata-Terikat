@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U-TAPIS Kata Terikat</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-blue-200 text-white text-center">
+    <div class="mx-auto w-screen h-screen">
+        <div class="w-screen bg-blue-800 h-16 flex flex-row justify-center">
+            <h1 class="text-3xl font-bold my-auto">U-TAPIS Kata Terikat</h1>
+        </div>
+        <div class="flex flex-row justify-center align-center">
+            <form class="max-w-md mt-16 w-screen text-black" action="/check" method="POST">
+                <textarea type="text" name="paragraph" id="paragraph" placeholder="Enter your text here" class="w-full w-7/8 h-32 py-2 px-4 mb-4 bg-white border border-blue-500 rounded"></textarea>
+                <br>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded font-bold">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
