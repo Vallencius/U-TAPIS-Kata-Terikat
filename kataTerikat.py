@@ -251,7 +251,7 @@ def validateSatuKata(unique_data, word_list):
                     }
                 # print(word + " benar di index " + str(index))
             else:
-                if ((pattern == 'maha' or pattern == 'Maha') and word.lower() not in word_list):
+                if ((pattern == 'maha' or pattern == 'Maha') and word_without_pattern.lower() in word_list):
                     # Jika maha diikuti esa harus di spasi
                     if (word_without_pattern == 'esa' or word_without_pattern == 'Esa'):
                         result[word] = {

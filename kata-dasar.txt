@@ -3600,6 +3600,8 @@ branwir
 braseri
 brata
 diawali
+diawasi
+diamini
 sebuah
 bratawali
 bredel
@@ -20241,6 +20243,7 @@ perihal
 perihelion
 perikarditis
 perikardium
+perikanan
 perikemanusiaan
 perikondrium
 periksa
