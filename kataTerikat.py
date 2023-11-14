@@ -1,7 +1,6 @@
 from bigram import split_words
 
 patterns = [
-    'a',
     'ab',
     'adi',
     'aero',
@@ -119,7 +118,6 @@ patterns = [
     'uni',
     'upa',
     'zeta',
-    'A',
     'Ab',
     'Adi',
     'Aero',
@@ -240,19 +238,20 @@ patterns = [
 ]
 
 def validateSatuKata(unique_data, word_list):
+    exception = ['maha', 'se']
     result = {}
     # Search kata terikat 1 word
     for pattern, word_without_pattern, word, index in unique_data:
         if ('-' not in word and word_without_pattern != ''):
             # Jika bukan maha dan sesuai kata terikat maka pasti benar
-            if (pattern != 'maha' and pattern != 'Maha' and (word_without_pattern in word_list) and word not in word_list):
+            if (pattern.lower() not in exception and (word_without_pattern.lower() in word_list) and word.lower() not in word_list):
                 result[word] = {
                         "is_correct": True,
                         "suggestion": None
                     }
                 # print(word + " benar di index " + str(index))
             else:
-                if (pattern == 'maha' or pattern == 'Maha'):
+                if ((pattern == 'maha' or pattern == 'Maha') and word.lower() not in word_list):
                     # Jika maha diikuti esa harus di spasi
                     if (word_without_pattern == 'esa' or word_without_pattern == 'Esa'):
                         result[word] = {
@@ -263,7 +262,7 @@ def validateSatuKata(unique_data, word_list):
                     
                     else:
                         # Jika maha diikuti kata dasar, benar
-                        if (word_without_pattern in word_list):
+                        if (word_without_pattern.lower() in word_list):
                             result[word] = {
                                     "is_correct": True,
                                     "suggestion": None
@@ -279,15 +278,14 @@ def validateSatuKata(unique_data, word_list):
 
         # Jika ada dash (tanda hubung)
         if ('-' in word and word[0] != '-' and word[-1] != '-'):
-            word_without_dash = word.translate(str.maketrans("", "", r"-"))
             word_without_dash_and_pattern = word_without_pattern.translate(str.maketrans("", "", r"-"))
 
             if (pattern != word_without_dash_and_pattern):
                 # Jika ada tanda dash tetapi seharusnya tidak
-                if (word_without_dash_and_pattern in word_list):
+                if (word_without_dash_and_pattern.lower() in word_list):
                     result[word] = {
                             "is_correct": False,
-                            "suggestion": word_without_dash
+                            "suggestion": pattern + word_without_dash_and_pattern.lower()
                         }
                     # print(word + " salah di index " + str(index) + ". Rekomendasi yang diberikan: " + word_without_dash)
                 else:
@@ -303,27 +301,28 @@ def validateSatuKata(unique_data, word_list):
     return result
 
 def validateDuaKata(detected_bigram_with_terikat_prefix, word_list):
+    exception = ['kata', 'para', 'dia', 'tak', 'si']
     resultKataTerikat = {}
     for pattern, bigram_text, index in detected_bigram_with_terikat_prefix:
         result = split_words(bigram_text)
         word = bigram_text.replace(" ", "")
         
         # Jika terpisah dengan spasi namun seharusnya digabung
-        if (result[1] in word_list) and result[0] != 'kata' and result[0] != 'para' and result[0].lower() != 'maha' and word not in word_list and result[0] in patterns:
+        if (result[1] in word_list) and result[0].lower() not in exception and result[0].lower() != 'maha' and word.lower() not in word_list and result[0] in patterns:
             resultKataTerikat[bigram_text] = {
                     "is_correct": False,
                     "suggestion": word
                 }
             # print(bigram_text + " salah di index " + str(index) + ". rekomendasi yang diberikan: " + word)
 
-        if (result[1] in word_list) and result[0] == 'para' and word in word_list and result[0] in patterns:
+        if (result[1] in word_list) and result[0].lower() == 'para' and word.lower() in word_list and result[0] in patterns:
             resultKataTerikat[bigram_text] = {
                     "is_correct": False,
                     "suggestion": result[0] + result[1]
                 }
 
         # Jika terpisah dengan spasi namun seharusnya diberi tanda hubung (-)
-        if (result[1][0].isupper()) and result[0] != 'kata' and result[0].lower() != 'maha' and result[0] in patterns and result[1].lower() in word_list:
+        if (result[1][0].isupper()) and result[0].lower() not in exception and result[0].lower() != 'maha' and result[0] in patterns and result[1].lower() in word_list:
             resultKataTerikat[bigram_text] = {
                     "is_correct": False,
                     "suggestion": result[0] + '-' + result[1]

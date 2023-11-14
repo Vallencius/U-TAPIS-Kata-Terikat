@@ -31,16 +31,18 @@
             <div class="w-5/6 bg-white border border-blue-400 rounded text-left pl-4 py-4">
                 <ol class="list-decimal list-inside">
                     {% for word, info in data.result.items() %}
-                        {% if info.is_correct == False %}
-                            <li class="text-red-500">{{ word }}</li>
-                            <ul class="list-disc ml-12">
-                                <li>Perbaikan: {{ info.suggestion }}</li>
-                            </ul>
-                        {% else %}
-                            {% if info.is_correct == True %}
-                                <li class="text-green-500">{{ word }}</li>
+                        {% if word in data.paragraph %}
+                            {% if info.is_correct == False %}
+                                <li class="text-red-500">{{ word }}</li>
+                                <ul class="list-disc ml-12">
+                                    <li>Perbaikan: {{ info.suggestion }}</li>
+                                </ul>
                             {% else %}
-                                <p>{{ info }}</p>
+                                {% if info.is_correct == True %}
+                                    <li class="text-green-500">{{ word }}</li>
+                                {% else %}
+                                    <p>{{ info }}</p>
+                                {% endif %}
                             {% endif %}
                         {% endif %}
                     {% endfor %}
