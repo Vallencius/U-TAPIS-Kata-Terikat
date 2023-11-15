@@ -8,6 +8,9 @@ def preprocessing(text):
     # menghapus angka
     text = re.sub(r"\d+", "", text)
 
+    # menghapus \r \n
+    text = text.replace('\r', ' ').replace('\n', ' ')
+
     # menghapus tanda baca tanpa -
     text = text.translate(str.maketrans("", "", string.punctuation.replace('-', '')))
 

@@ -1,4 +1,5 @@
 from bigram import split_words
+from preprocessing import preprocessing
 
 patterns = [
     'ab',
@@ -300,7 +301,7 @@ def validateSatuKata(unique_data, word_list):
                         
     return result
 
-def validateDuaKata(detected_bigram_with_terikat_prefix, word_list):
+def validateDuaKata(detected_bigram_with_terikat_prefix, word_list, text):
     exception = ['kata', 'para', 'dia', 'tak', 'si']
     resultKataTerikat = {}
     for pattern, bigram_text, index in detected_bigram_with_terikat_prefix:
@@ -323,10 +324,22 @@ def validateDuaKata(detected_bigram_with_terikat_prefix, word_list):
 
         # Jika terpisah dengan spasi namun seharusnya diberi tanda hubung (-)
         if (result[1][0].isupper()) and result[0].lower() not in exception and result[0].lower() != 'maha' and result[0] in patterns and result[1].lower() in word_list:
-            resultKataTerikat[bigram_text] = {
-                    "is_correct": False,
-                    "suggestion": result[0] + '-' + result[1]
-                }
+            start_index = text.find(bigram_text)
+            if start_index != -1:
+                sentence_start = text.rfind('.', 0, start_index) + 1
+                sentence_end = text.find('.', start_index)
+
+                # Extracting the sentence
+                sentence = preprocessing(text[sentence_start:sentence_end])
+
+                # Checking if the sentence is in title case
+                is_title_case = is_title_or_upper(sentence)
+
+                if (not is_title_case):
+                    resultKataTerikat[bigram_text] = {
+                            "is_correct": False,
+                            "suggestion": sentence
+                        }
             # print(bigram_text + " salah di index " + str(index) + ". Rekomendasi yang diberikan: " + result[0] + '-' + result[1])
             
         #Jika ada Maha dan dipisah dengan kata selanjutnya, digabung kecuali Esa
@@ -363,3 +376,25 @@ def validateDuaKata(detected_bigram_with_terikat_prefix, word_list):
                     # print(bigram_text + " salah di index " + str(index) + ". Rekomendasi yang diberikan: Maha Esa")
     
     return resultKataTerikat
+
+def is_title_or_upper(string):
+    count = 0
+
+    # Check if the entire string is uppercase, if so, return True
+    if string.isupper():
+        return True
+
+    # Split the string into words
+    words = string.split()
+    treshold = len(words)/2
+
+    # Check each word
+    for word in words:
+        # If a word is not all uppercase and not in title case, return False
+        if not word.isupper() and not word.istitle():
+            count += 1
+            if (count == treshold):
+                return False
+
+    # If all checks pass, return True
+    return True

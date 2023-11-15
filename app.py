@@ -57,7 +57,7 @@ def main():
     result.update(validateSatuKata(unique_data, word_list))
 
     if (detected_bigram_with_terikat_prefix != []):
-        result.update(validateDuaKata(detected_bigram_with_terikat_prefix, word_list))
+        result.update(validateDuaKata(detected_bigram_with_terikat_prefix, word_list, text))
 
     # Jika tidak ada kata terikat
     if (result == {}):
