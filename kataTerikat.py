@@ -45,7 +45,6 @@ patterns = [
     'hipo',
     'homo',
     'in',
-    'indo',
     'infra',
     'inter',
     'intra',
@@ -162,7 +161,6 @@ patterns = [
     'Hipo',
     'Homo',
     'In',
-    'Indo',
     'Infra',
     'Inter',
     'Intra',
@@ -252,9 +250,9 @@ def validateSatuKata(unique_data, word_list):
                     }
                 # print(word + " benar di index " + str(index))
             else:
-                if ((pattern == 'maha' or pattern == 'Maha') and word_without_pattern.lower() in word_list):
-                    # Jika maha diikuti esa harus di spasi
-                    if (word_without_pattern == 'esa' or word_without_pattern == 'Esa'):
+                if (pattern == 'maha' or pattern == 'Maha'):
+                    # Jika maha merupakan kata sifat Tuhan
+                    if ((word_without_pattern.lower() == 'esa' or word_without_pattern.lower() in word_list) and word_without_pattern.lower() not in ['siswa', 'guru', 'gita', 'karya']):
                         result[word] = {
                                 "is_correct": False,
                                 "suggestion": pattern.title() + " " + word_without_pattern.title()
@@ -262,42 +260,53 @@ def validateSatuKata(unique_data, word_list):
                         # print(word + " salah di index " + str(index) + ". Rekomendasi yang diberikan: " + pattern.title() + " " + word_without_pattern.title())
                     
                     else:
-                        # Jika maha diikuti kata dasar, benar
-                        if (word_without_pattern.lower() in word_list):
-                            result[word] = {
-                                    "is_correct": True,
-                                    "suggestion": None
-                                }
+                        # Jika maha bukan kata sifat Tuhan
+                        result[word] = {
+                                "is_correct": True,
+                                "suggestion": None
+                            }
                             # print(word + " benar di index " + str(index))
-                        # Jika maha diikuti kata turunan harus dipisah
-                        else:
-                            result[word] = {
-                                    "is_correct": False,
-                                    "suggestion": pattern.title() + " " + word_without_pattern.title()
-                                }
-                            # print(word + " salah di index " + str(index) + ". Rekomendasi yang diberikan: " + pattern.title() + " " + word_without_pattern.title())
 
         # Jika ada dash (tanda hubung)
         if ('-' in word and word[0] != '-' and word[-1] != '-'):
             word_without_dash_and_pattern = word_without_pattern.translate(str.maketrans("", "", r"-"))
 
             if (pattern != word_without_dash_and_pattern):
-                # Jika ada tanda dash tetapi seharusnya tidak
-                if (word_without_dash_and_pattern.lower() in word_list):
-                    result[word] = {
-                            "is_correct": False,
-                            "suggestion": pattern + word_without_dash_and_pattern.lower()
-                        }
-                    # print(word + " salah di index " + str(index) + ". Rekomendasi yang diberikan: " + word_without_dash)
-                else:
-                    
-                    # Jika ada tanda dash tetapi kata kedua diawali dengan huruf kapital
-                    if (word_without_dash_and_pattern[0].isupper()):
+                if (pattern == 'maha' or pattern == 'Maha'):
+                    # Jika maha merupakan kata sifat Tuhan
+                    if (word_without_dash_and_pattern.lower() == 'esa' or word_without_dash_and_pattern.lower() not in ['siswa', 'guru', 'gita', 'karya']):
                         result[word] = {
-                                "is_correct": True,
-                                "suggestion": None
+                                "is_correct": False,
+                                "suggestion": pattern.title() + " " + word_without_dash_and_pattern.title()
+                        }
+                        # print(word + " salah di index " + str(index) + ". Rekomendasi yang diberikan: " + pattern.title() + " " + word_without_dash_and_pattern.title())
+                    
+                    else:
+                        if (word_without_dash_and_pattern.lower() in word_list):
+                            # Jika maha bukan kata sifat Tuhan
+                            result[word] = {
+                                    "is_correct": False,
+                                    "suggestion": pattern + word_without_dash_and_pattern.lower()
+                                }
+                                # print(word + " benar di index " + str(index))
+
+                
+                else:
+                    # Jika ada tanda dash tetapi seharusnya tidak
+                    if (word_without_dash_and_pattern.lower() in word_list):
+                        result[word] = {
+                                "is_correct": False,
+                                "suggestion": pattern + word_without_dash_and_pattern.lower()
                             }
-                        # print(word + " benar di index " + str(index))
+                        # print(word + " salah di index " + str(index) + ". Rekomendasi yang diberikan: " + word_without_dash)
+                    else:                    
+                        # Jika ada tanda dash tetapi kata kedua diawali dengan huruf kapital
+                        if (word_without_dash_and_pattern[0].isupper()):
+                            result[word] = {
+                                    "is_correct": True,
+                                    "suggestion": None
+                                }
+                            # print(word + " benar di index " + str(index))
                         
     return result
 
@@ -343,21 +352,28 @@ def validateDuaKata(detected_bigram_with_terikat_prefix, word_list, text):
             # print(bigram_text + " salah di index " + str(index) + ". Rekomendasi yang diberikan: " + result[0] + '-' + result[1])
             
         #Jika ada Maha dan dipisah dengan kata selanjutnya, digabung kecuali Esa
-        if result[0] == 'Maha' and result[1].lower() != 'esa':
-            if result[1].lower() in word_list:
+        if result[0].lower() == 'maha' and result[1].lower() != 'esa':
+            # Jika Maha bukan merupakan kata sifat Tuhan
+            if result[1].lower() in ['siswa', 'guru', 'gita']:
                 resultKataTerikat[bigram_text] = {
                         "is_correct": False,
                         "suggestion": result[0] + result[1].lower()
                     }
                 # print(bigram_text + " salah di index " + str(index) + ". Rekomendasi yang diberikan: " + result[0] + result[1].lower())
 
-            # Jika Maha dipisah dan diikuti kata turunan
+            # Jika Maha bukan kata sifat Tuhan
             else:
-                resultKataTerikat[bigram_text] = {
-                        "is_correct": True,
-                        "suggestion": None
-                    }
-                # print(bigram_text + " benar di index " + str(index))
+                if result[0].istitle() and result[1].istitle():
+                    resultKataTerikat[bigram_text] = {
+                            "is_correct": True,
+                            "suggestion": None
+                        }
+                    # print(bigram_text + " benar di index " + str(index))
+                else:
+                    resultKataTerikat[bigram_text] = {
+                            "is_correct": False,
+                            "suggestion": result[0].title() + ' ' + result[1].title()
+                        }
         else:
             # Jika Maha Esa maka benar
             if result[0] == 'Maha' and result[1] == 'Esa':
@@ -368,7 +384,7 @@ def validateDuaKata(detected_bigram_with_terikat_prefix, word_list, text):
                 # print(bigram_text + " benar di index " + str(index))
             else:
                 # Jika Maha esa, maka Maha Esa
-                if result[0] == 'Maha' and result[1] == 'esa':
+                if result[0] == 'maha' or result[1] == 'esa':
                     resultKataTerikat[bigram_text] = {
                             "is_correct": False,
                             "suggestion": "Maha Esa"
