@@ -288,9 +288,7 @@ def validateSatuKata(unique_data, word_list):
                                     "is_correct": False,
                                     "suggestion": pattern + word_without_dash_and_pattern.lower()
                                 }
-                                # print(word + " benar di index " + str(index))
-
-                
+                                # print(word + " benar di index " + str(index))                
                 else:
                     # Jika ada tanda dash tetapi seharusnya tidak
                     if (word_without_dash_and_pattern.lower() in word_list):
@@ -353,7 +351,7 @@ def validateDuaKata(detected_bigram_with_terikat_prefix, word_list, text):
             
         #Jika ada Maha dan dipisah dengan kata selanjutnya, digabung kecuali Esa
         if result[0].lower() == 'maha' and result[1].lower() != 'esa':
-            # Jika Maha bukan merupakan kata sifat Tuhan
+            # Jika Maha bukan kata sifat Tuhan
             if result[1].lower() in ['siswa', 'guru', 'gita']:
                 resultKataTerikat[bigram_text] = {
                         "is_correct": False,
@@ -361,7 +359,7 @@ def validateDuaKata(detected_bigram_with_terikat_prefix, word_list, text):
                     }
                 # print(bigram_text + " salah di index " + str(index) + ". Rekomendasi yang diberikan: " + result[0] + result[1].lower())
 
-            # Jika Maha bukan kata sifat Tuhan
+            # Jika Maha merupakan kata sifat Tuhan
             else:
                 if result[0].istitle() and result[1].istitle():
                     resultKataTerikat[bigram_text] = {
