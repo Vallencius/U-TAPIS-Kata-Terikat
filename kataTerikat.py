@@ -290,21 +290,20 @@ def validateSatuKata(unique_data, word_list):
                                 }
                                 # print(word + " benar di index " + str(index))                
                 else:
+                    # Jika ada tanda dash tetapi kata kedua diawali dengan huruf kapital
+                    if (word_without_dash_and_pattern[0].isupper()):
+                        result[word] = {
+                                "is_correct": True,
+                                "suggestion": None
+                            }
+                        # print(word + " benar di index " + str(index))
                     # Jika ada tanda dash tetapi seharusnya tidak
-                    if (word_without_dash_and_pattern.lower() in word_list):
+                    elif (word_without_dash_and_pattern.lower() in word_list):
                         result[word] = {
                                 "is_correct": False,
                                 "suggestion": pattern + word_without_dash_and_pattern.lower()
                             }
-                        # print(word + " salah di index " + str(index) + ". Rekomendasi yang diberikan: " + word_without_dash)
-                    else:                    
-                        # Jika ada tanda dash tetapi kata kedua diawali dengan huruf kapital
-                        if (word_without_dash_and_pattern[0].isupper()):
-                            result[word] = {
-                                    "is_correct": True,
-                                    "suggestion": None
-                                }
-                            # print(word + " benar di index " + str(index))
+                        # print(word + " salah di index " + str(index) + ". Rekomendasi yang diberikan: " + word_without_dash)                  
                         
     return result
 
