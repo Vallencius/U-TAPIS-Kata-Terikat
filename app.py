@@ -69,7 +69,12 @@ def main(lang):
 
     # Jika tidak ada kata terikat
     if (result == {}):
-        result = {'errormessage': "Tidak ada kata terikat yang ditemukan"}
+        errorMessage = "Tidak ada kata terikat yang ditemukan"
+
+        if (lang == 'en'):
+            errorMessage = "No kata terikat is found"
+
+        result = {'errormessage': errorMessage}
     
     return render_template(lang + '/result.html', data = {
         'paragraph': text,
