@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U-TAPIS Kata Terikat</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" href="../static/UMN-square.png" type="image/x-icon">
+</head>
+<body class="bg-blue-200 text-white text-center">
+    <div class="mx-auto w-screen h-screen">
+        <div class="fixed left-4 z-50 hidden md:block">
+            <img src="../static/logo_umn_white.png" class="h-12 my-2"/>
+        </div>
+        <div class="w-screen bg-blue-800 h-16 flex flex-row justify-center z-40">
+            <h1 class="text-3xl font-bold my-auto">U-TAPIS Kata Terikat</h1>
+        </div>
+        <div class="flex flex-row justify-center align-center">
+            <form class="max-w-md mt-16 w-screen text-black" action="/en/check" method="POST">
+                <textarea type="text" name="paragraph" id="paragraph" placeholder="Enter your text here" class="w-full w-7/8 h-32 py-2 px-4 mb-4 bg-white border border-blue-500 rounded"></textarea>
+                <br>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded font-bold">Submit</button>
+            </form>
+        </div>
+        <div class="fixed w-screen bg-blue-800 h-16 flex flex-row items-center justify-center z-40 bottom-0">
+            <a href="/"><button class="border border-blue-900 rounded py-1 px-4 bg-blue-300 text-blue-900 font-bold cursor-pointer">Change Language to ID</button></a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U-TAPIS Kata Terikat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../static/color.js"></script>
+    <link rel="icon" href="../static/UMN-square.png" type="image/x-icon">
+</head>
+<body class=" overflow-x-hidden">
+    <div class="bg-blue-200 text-white text-center w-screen min-h-screen pb-16">
+        <div class="fixed left-4 z-50 hidden md:block">
+            <img src="../static/logo_umn_white.png" class="h-12 my-2"/>
+        </div>
+        <div class="w-screen bg-blue-800 h-16 flex flex-row justify-center fixed z-40">
+            <h1 class="text-3xl font-bold my-auto">U-TAPIS Kata Terikat</h1>
+        </div>
+        <a href="/"><button class="mt-20 text-left absolute left-4 md:left-12 font-bold text-indigo-900 border border-blue-900 rounded py-1 px-4 bg-blue-300 z-10">Kembali</button></a>
+        <div class="flex flex-col justify-evenly align-evenly items-center w-full h-full text-black pt-16">
+            <h1 class="text-xl font-bold my-auto text-blue-800 mt-16 mb-2">Paragraf yang dimasukkan</h1>
+            <div class="w-5/6 bg-white border border-blue-400 rounded text-left pl-4 py-4" id="oldParagraph">
+                {{ data.paragraph }}
+            </div>
+            <h1 class="text-xl font-bold my-auto text-blue-800 mt-16 mb-2">Perbaikan Paragraf</h1>
+            <div class="text-right w-5/6">
+                <button class="border border-blue-900 rounded py-1 px-4 bg-blue-300 text-blue-900 font-bold mb-2 cursor-pointer" onclick="copyToClipboard()">Salin teks</button>
+            </div>
+            <div class="w-5/6 bg-white border border-blue-400 rounded text-left pl-4 py-4" id="newParagraph">
+                <p id="copyText">{{ data.paragraph }}</p>
+            </div>
+            <h1 class="text-xl font-bold my-auto text-blue-800 mt-16 mb-2">Kata Terikat Terdeteksi dan Perbaikannya</h1>
+            <div class="w-5/6 bg-white border border-blue-400 rounded text-left pl-4 py-4">
+                <ol class="list-decimal list-inside">
+                    {% for word, info in data.result.items() %}
+                        {% if word in data.paragraph or word == 'errormessage' %}
+                            {% if info.is_correct == False %}
+                                <li class="text-red-500">{{ word }}</li>
+                                <ul class="list-disc ml-12">
+                                    <li>Koreksi: {{ info.suggestion }}</li>
+                                </ul>
+                            {% else %}
+                                {% if info.is_correct == True %}
+                                    <li class="text-green-500">{{ word }}</li>
+                                {% else %}
+                                    <p>{{ info }}</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+            </div>
+            <p class="hidden">Hasil: <span id="result">{{ data['result'] }}</span></p>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard() {
+            var range = document.createRange();
+            range.selectNode(document.getElementById("copyText"));
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range); 
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges();
+            alert("Paragraf tersalin!");
+          }
+    </script>
+</body>
+</html>

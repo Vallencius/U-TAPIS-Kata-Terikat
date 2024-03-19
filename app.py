@@ -9,14 +9,22 @@ app = Flask(__name__, template_folder='html')
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return render_template('id/index.html')
+
+@app.route('/en', methods=['GET'])
+def indexEN():
+    return render_template('en/index.html')
     
 @app.route('/result', methods=['GET'])
 def result():
-    return render_template('result.html')
+    return render_template('id/result.html')
+    
+@app.route('/en/result', methods=['GET'])
+def resultEN():
+    return render_template('en/result.html')
 
-@app.route('/check', methods=['POST'])
-def main():
+@app.route('/<path:lang>/check', methods=['POST'])
+def main(lang):
     warnings.filterwarnings("ignore")
 
     # Baca file txt sebagai input
@@ -63,7 +71,7 @@ def main():
     if (result == {}):
         result = {'errormessage': "Tidak ada kata terikat yang ditemukan"}
     
-    return render_template('result.html', data = {
+    return render_template(lang + '/result.html', data = {
         'paragraph': text,
         'result': result
     })

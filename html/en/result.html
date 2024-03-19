@@ -19,15 +19,18 @@
         </div>
         <a href="/"><button class="mt-20 text-left absolute left-4 md:left-12 font-bold text-indigo-900 border border-blue-900 rounded py-1 px-4 bg-blue-300 z-10">Back</button></a>
         <div class="flex flex-col justify-evenly align-evenly items-center w-full h-full text-black pt-16">
-            <h1 class="text-xl font-bold my-auto text-blue-800 mt-16 mb-2">Input Paragraf</h1>
+            <h1 class="text-xl font-bold my-auto text-blue-800 mt-16 mb-2">Inputed Paragraph</h1>
             <div class="w-5/6 bg-white border border-blue-400 rounded text-left pl-4 py-4" id="oldParagraph">
                 {{ data.paragraph }}
             </div>
-            <h1 class="text-xl font-bold my-auto text-blue-800 mt-16 mb-2">Paragraf Benar</h1>
-            <div class="w-5/6 bg-white border border-blue-400 rounded text-left pl-4 py-4" id="newParagraph">
-                {{ data.paragraph }}
+            <h1 class="text-xl font-bold my-auto text-blue-800 mt-16 mb-2">Correct Paragraph</h1>
+            <div class="text-right w-5/6">
+                <button class="border border-blue-900 rounded py-1 px-4 bg-blue-300 text-blue-900 font-bold mb-2 cursor-pointer" onclick="copyToClipboard()">Copy text</button>
             </div>
-            <h1 class="text-xl font-bold my-auto text-blue-800 mt-16 mb-2">Kata Terikat Terdeterksi dan Perbaikannya</h1>
+            <div class="w-5/6 bg-white border border-blue-400 rounded text-left pl-4 py-4" id="newParagraph">
+                <p id="copyText">{{ data.paragraph }}</p>
+            </div>
+            <h1 class="text-xl font-bold my-auto text-blue-800 mt-16 mb-2">Detected Kata Terikat and Its Correction</h1>
             <div class="w-5/6 bg-white border border-blue-400 rounded text-left pl-4 py-4">
                 <ol class="list-decimal list-inside">
                     {% for word, info in data.result.items() %}
@@ -35,7 +38,7 @@
                             {% if info.is_correct == False %}
                                 <li class="text-red-500">{{ word }}</li>
                                 <ul class="list-disc ml-12">
-                                    <li>Perbaikan: {{ info.suggestion }}</li>
+                                    <li>Correction: {{ info.suggestion }}</li>
                                 </ul>
                             {% else %}
                                 {% if info.is_correct == True %}
@@ -51,5 +54,17 @@
             <p class="hidden">Result: <span id="result">{{ data['result'] }}</span></p>
         </div>
     </div>
+
+    <script>
+        function copyToClipboard() {
+            var range = document.createRange();
+            range.selectNode(document.getElementById("copyText"));
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range); 
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges();
+            alert("Paragraph copied!");
+          }
+    </script>
 </body>
 </html>
